@@ -7,7 +7,8 @@ export const getProductById: LamdaConfig = {
     {
       http: {
         method: 'get',
-        path: 'product/{id}'
+        path: 'product/{id}',
+        cors: true
       }
     }
   ]

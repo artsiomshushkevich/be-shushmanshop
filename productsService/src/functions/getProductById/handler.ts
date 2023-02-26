@@ -1,11 +1,12 @@
 import { v4 as uuidv4 } from 'uuid';
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { formatJSONResponse } from '@libs/api-gateway';
+import { middyfy }  from '@libs/lambda';
 import { HttpErrorBody } from '@localtypes/httpErrorBody';
 import { HttpStatusCodes } from '@localtypes/httpStatusCodes';
 import { productsModel } from '@models/products';
 
-export const main: ValidatedEventAPIGatewayProxyEvent<null> = async (event) => {
+export const main: ValidatedEventAPIGatewayProxyEvent<null> = middyfy(async (event) => {
   const { id } = event.pathParameters;
 
   const product = await productsModel.getById(id);
@@ -20,4 +21,4 @@ export const main: ValidatedEventAPIGatewayProxyEvent<null> = async (event) => {
 
     return formatJSONResponse(errorBody, HttpStatusCodes.NotFound);
   }
-};
+});

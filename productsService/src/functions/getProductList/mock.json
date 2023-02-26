@@ -3,8 +3,5 @@
     "headers": {
         "Content-Type": "application/json"
     },
-    "pathParameters": {
-        "id": "2"
-    },
     "body": null
 }
