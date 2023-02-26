@@ -6,4 +6,3 @@ export enum HttpStatusCodes {
 }
 
 export type HttpStatusCodesUnion = 404 | 400 | 500 | 200;
-
