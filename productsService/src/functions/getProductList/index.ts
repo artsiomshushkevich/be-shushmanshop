@@ -7,7 +7,7 @@ export const getProductList: LamdaConfig = {
     {
       http: {
         method: 'get',
-        path: 'getProductList'
+        path: 'product/available'
       }
     }
   ]

@@ -1,5 +1,5 @@
 {
-  "name": "productsService",
+  "name": "products-service",
   "version": "1.0.0",
   "description": "Service for handling products info",
   "main": "serverless.ts",

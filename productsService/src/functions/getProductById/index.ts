@@ -7,7 +7,7 @@ export const getProductById: LamdaConfig = {
     {
       http: {
         method: 'get',
-        path: 'getProductById/{id}'
+        path: 'product/{id}'
       }
     }
   ]
