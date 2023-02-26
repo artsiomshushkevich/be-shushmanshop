@@ -6,7 +6,8 @@
     "scripts": {
         "test": "jest",
         "deploy": "sls deploy",
-        "prettier": "prettier --write src/**/*.ts src/**/*.json",
+        "prettier:check": "prettier --check src/**/*",
+        "prettier:fix": "prettier --write src/**/*",
         "prepare": "cd .. && husky install productsService/.husky"
     },
     "engines": {
