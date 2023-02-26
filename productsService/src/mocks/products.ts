@@ -1,4 +1,4 @@
-import type { Product } from "@localtypes/product";
+import type { Product } from "@models/products/product.types";
 
 export const products: Product[] = [
     {
