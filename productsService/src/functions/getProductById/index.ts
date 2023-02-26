@@ -1,13 +1,13 @@
 import { handlerPath } from '@libs/handler-resolver';
-import { LamdaConfig } from '@libs/types';
+import type { LamdaConfig } from '@libs/types';
 
-export const getProductList: LamdaConfig = {
+export const getProductById: LamdaConfig = {
   handler: `${handlerPath(__dirname)}/handler.main`,
   events: [
     {
       http: {
         method: 'get',
-        path: 'getProductList'
+        path: 'getProductById/{id}'
       }
     }
   ]
