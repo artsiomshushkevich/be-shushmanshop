@@ -20,7 +20,6 @@
         "uuid": "^9.0.0"
     },
     "devDependencies": {
-        "@babel/core": "^7.21.0",
         "@serverless/typescript": "^3.0.0",
         "@types/aws-lambda": "^8.10.71",
         "@types/jest": "^29.4.0",
