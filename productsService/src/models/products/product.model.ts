@@ -1,20 +1,20 @@
-import { products } from '@mocks/products';
 import { Product } from './product.types';
+import { db, unmarshall, ScanCommand, GetItemCommand } from '@libs/dynamodb';
 
 export const productsModel = {
-    getList: (): Promise<Product[]> =>
-        new Promise((resolve) =>
-            setTimeout(() => {
-                resolve(products);
-            }, 50)
-        ),
+    getList: async (): Promise<Product[]> => {
+        const response = await db.send(new ScanCommand({
+            TableName:  'ProductsTable'
+        }));
 
-    getById: (id: string): Promise<Product | null> =>
-        new Promise((resolve) =>
-            setTimeout(() => {
-                const product = products.find((item) => item.id === id);
+        return response.Items.map(item => unmarshall(item) as Product);
+    },
+    getById: async (id: string): Promise<Product | null> => {
+        const response = await db.send(new GetItemCommand({
+            TableName:  'ProductsTable',
+            Key: { id: { S: id } }
+        }));
 
-                resolve(product);
-            }, 50)
-        )
+        return response.Item ? unmarshall(response.Item) as Product : null;
+    }
 };

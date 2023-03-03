@@ -1,9 +1,9 @@
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { formatJSONResponse } from '@libs/api-gateway';
-import { productsModel } from '@models/products';
+import { productsService } from '@services/products';
 
 export const getProductList: ValidatedEventAPIGatewayProxyEvent<null> = async () => {
-    const products = await productsModel.getList();
+    const products = await productsService.getList();
 
     return formatJSONResponse(products);
 };

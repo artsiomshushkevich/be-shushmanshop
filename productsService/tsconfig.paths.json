@@ -6,7 +6,8 @@
             "@models/*": ["src/models/*"],
             "@libs/*": ["src/libs/*"],
             "@localtypes/*": ["src/types/*"],
-            "@mocks/*": ["src/mocks/*"]
+            "@mocks/*": ["src/mocks/*"],
+            "@services/*": ["src/services/*"]
         }
     }
 }

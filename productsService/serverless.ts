@@ -50,20 +50,12 @@ const serverlessConfiguration: AWS = {
                         {
                             AttributeName: 'id',
                             AttributeType: 'S'
-                        },
-                        {
-                            AttributeName: 'title',
-                            AttributeType: 'S'
                         }
                     ],
                     KeySchema: [
                         {
                             AttributeName: 'id',
                             KeyType: 'HASH'
-                        },
-                        {
-                            AttributeName: 'title',
-                            KeyType: 'RANGE'
                         }
                     ],
                     ProvisionedThroughput: {
@@ -80,20 +72,12 @@ const serverlessConfiguration: AWS = {
                         {
                             AttributeName: 'productId',
                             AttributeType: 'S'
-                        },
-                        {
-                            AttributeName: 'amount',
-                            AttributeType: 'N'
                         }
                     ],
                     KeySchema: [
                         {
                             AttributeName: 'productId',
                             KeyType: 'HASH'
-                        },
-                        {
-                            AttributeName: 'amount',
-                            KeyType: 'RANGE'
                         }
                     ],
                     ProvisionedThroughput: {

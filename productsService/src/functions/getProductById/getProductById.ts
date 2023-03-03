@@ -1,14 +1,14 @@
 import { v4 as uuidv4 } from 'uuid';
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { formatJSONResponse } from '@libs/api-gateway';
-import { HttpErrorBody } from '@localtypes/httpErrorBody';
+import type { HttpErrorBody } from '@localtypes/httpErrorBody';
 import { HttpStatusCodes } from '@localtypes/httpStatusCodes';
-import { productsModel } from '@models/products';
+import { productsService } from '@services/products';
 
 export const getProductById: ValidatedEventAPIGatewayProxyEvent<null> = async (event) => {
     const { id } = event.pathParameters;
 
-    const product = await productsModel.getById(id);
+    const product = await productsService.getById(id);
 
     if (product) {
         return formatJSONResponse(product);
