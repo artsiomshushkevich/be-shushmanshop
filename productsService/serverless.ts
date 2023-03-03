@@ -1,6 +1,7 @@
 import type { AWS } from '@serverless/typescript';
 import { getProductList } from '@functions/getProductList';
 import { getProductById } from '@functions/getProductById';
+import { createProduct } from '@functions/createProduct';
 
 const REGION = 'eu-west-1';
 
@@ -88,7 +89,7 @@ const serverlessConfiguration: AWS = {
             }
         }
     },
-    functions: { getProductList, getProductById },
+    functions: { getProductList, getProductById, createProduct },
     package: { individually: true },
     custom: {
         esbuild: {
