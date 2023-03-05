@@ -42,6 +42,6 @@ export const productsService = {
             count: count || 0
         });
 
-        return { ...newProduct, count };
+        return { ...newProduct, count: count || 0 };
     }
 };
