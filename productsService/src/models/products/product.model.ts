@@ -5,7 +5,7 @@ export const productsModel = {
     getList: async (): Promise<Product[]> => {
         const response = await db.send(
             new ScanCommand({
-                TableName: 'ProductsTable'
+                TableName: process.env.PRODUCTS_TABLE
             })
         );
 
@@ -14,7 +14,7 @@ export const productsModel = {
     getById: async (id: string): Promise<Product | null> => {
         const response = await db.send(
             new GetItemCommand({
-                TableName: 'ProductsTable',
+                TableName: process.env.PRODUCTS_TABLE,
                 Key: { id: { S: id } }
             })
         );
@@ -24,7 +24,7 @@ export const productsModel = {
     create: async (product: Product): Promise<boolean> => {
         await db.send(
             new PutItemCommand({
-                TableName: 'ProductsTable',
+                TableName: process.env.PRODUCTS_TABLE,
                 Item: marshall(product)
             })
         );

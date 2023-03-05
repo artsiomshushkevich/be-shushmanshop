@@ -5,6 +5,9 @@ import { createProduct } from '@functions/createProduct';
 
 const REGION = 'eu-west-1';
 
+const PRODUCTS_TABLE = 'ProductsTable';
+const STOCKS_TABLE = 'StocksTable';
+
 const serverlessConfiguration: AWS = {
     service: 'productsService',
     frameworkVersion: '3',
@@ -19,7 +22,9 @@ const serverlessConfiguration: AWS = {
         },
         environment: {
             AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
-            NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000'
+            NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
+            STOCKS_TABLE,
+            PRODUCTS_TABLE
         },
         iam: {
             role: {
