@@ -7,7 +7,8 @@ module.exports = {
         '^@localtypes/(.*)$': '<rootDir>/src/types/$1',
         '^@models/(.*)$': '<rootDir>/src/models/$1',
         '^@mocks/(.*)$': '<rootDir>/src/mocks/$1',
-        '^@services/(.*)$': '<rootDir>/src/services/$1'
+        '^@services/(.*)$': '<rootDir>/src/services/$1',
+        '^@utils/(.*)$': '<rootDir>/src/utils/$1'
     },
     transformIgnorePatterns: ['<rootDir>/node_modules/(?!@middy)'],
     transform: {
