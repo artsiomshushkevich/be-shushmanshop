@@ -3,6 +3,7 @@ import { getProductList } from '@functions/getProductList';
 import { getProductById } from '@functions/getProductById';
 import { createProduct } from '@functions/createProduct';
 
+// as task 2 is not reviewed, using eu-west-1 instead eu-central-1
 const REGION = 'eu-west-1';
 
 const PRODUCTS_TABLE = 'ProductsTable';

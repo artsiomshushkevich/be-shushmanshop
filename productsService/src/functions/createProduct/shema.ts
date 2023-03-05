@@ -4,7 +4,7 @@ export const shema = {
         title: { type: 'string' },
         price: { type: 'integer' },
         description: { type: 'string' },
-        amount: { type: 'integer' }
+        count: { type: 'integer' }
     },
     required: ['title', 'price', 'description']
 } as const;

@@ -1,3 +1,3 @@
 import type { Product } from '@models/products';
 
-export type ProductWithAmount = Product & { amount: number };
+export type ProductWithCount = Product & { count: number };
