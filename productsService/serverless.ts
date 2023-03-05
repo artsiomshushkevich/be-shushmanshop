@@ -8,7 +8,7 @@ const REGION = 'eu-west-1';
 const serverlessConfiguration: AWS = {
     service: 'productsService',
     frameworkVersion: '3',
-    plugins: ['serverless-esbuild'],
+    plugins: ['serverless-auto-swagger', 'serverless-esbuild'],
     provider: {
         name: 'aws',
         runtime: 'nodejs14.x',
