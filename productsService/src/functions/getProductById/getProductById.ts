@@ -5,14 +5,19 @@ import type { HttpErrorBody } from '@localtypes/httpErrorBody';
 import { HttpStatusCodes } from '@localtypes/httpStatusCodes';
 import { productsService } from '@services/products';
 import { createHttpErrorResponseObject } from '@utils/createHttpErrorResponseObject/createHttpErrorResponseObject';
+import type { DbMode } from '@localtypes/dbMode';
 
 export const getProductById: ValidatedEventAPIGatewayProxyEvent<null> = async (event) => {
     try {
         const { id } = event.pathParameters;
 
-        console.log('Getting specific product started. The product id is %s.', id);
+        console.log(
+            'Getting specific product started. The product id is %s. Parameters are %s',
+            id,
+            JSON.stringify(event.queryStringParameters)
+        );
 
-        const product = await productsService.getById(id);
+        const product = await productsService.getById(id, (event.queryStringParameters?.dbMode as DbMode) || 'mysql');
 
         if (product) {
             return formatJSONResponse(product);

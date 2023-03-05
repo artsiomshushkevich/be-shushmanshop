@@ -2,15 +2,24 @@ import { v4 as uuidv4 } from 'uuid';
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { formatJSONResponse } from '@libs/api-gateway';
 import { HttpStatusCodes } from '@localtypes/httpStatusCodes';
-import { productsService, ProductWithCount } from '@services/products';
-import { shema } from './shema';
+import { productsService } from '@services/products';
+import type { ProductWithCount } from '@models/products';
 import { createHttpErrorResponseObject } from '@utils/createHttpErrorResponseObject/createHttpErrorResponseObject';
+import { DbMode } from '@localtypes/dbMode';
+import { shema } from './shema';
 
 export const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof shema> = async (event) => {
     try {
-        console.log('Creation of the product started. The product is %s', JSON.stringify(event.body));
+        console.log(
+            'Creation of the product started. The product is %s. Params are %s. ',
+            JSON.stringify(event.body),
+            JSON.stringify(event.queryStringParameters)
+        );
 
-        const product = await productsService.create(event.body as Omit<ProductWithCount, 'id'>);
+        const product = await productsService.create(
+            event.body as Omit<ProductWithCount, 'id'>,
+            (event.queryStringParameters?.dbMode as DbMode) || 'mysql'
+        );
 
         return formatJSONResponse(product, HttpStatusCodes.Created);
     } catch (e) {

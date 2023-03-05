@@ -12,7 +12,7 @@ const STOCKS_TABLE = 'StocksTable';
 const serverlessConfiguration: AWS = {
     service: 'productsService',
     frameworkVersion: '3',
-    plugins: ['serverless-auto-swagger', 'serverless-esbuild'],
+    plugins: ['serverless-dotenv-plugin', 'serverless-esbuild'],
     provider: {
         name: 'aws',
         runtime: 'nodejs14.x',

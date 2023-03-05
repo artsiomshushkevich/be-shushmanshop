@@ -4,12 +4,16 @@ import { formatJSONResponse } from '@libs/api-gateway';
 import { productsService } from '@services/products';
 import { HttpStatusCodes } from '@localtypes/httpStatusCodes';
 import { createHttpErrorResponseObject } from '@utils/createHttpErrorResponseObject/createHttpErrorResponseObject';
+import type { DbMode } from '@localtypes/dbMode';
 
-export const getProductList: ValidatedEventAPIGatewayProxyEvent<null> = async () => {
+export const getProductList: ValidatedEventAPIGatewayProxyEvent<null> = async (event) => {
     try {
-        console.log('Getting all the available products started.');
+        console.log(
+            'Getting all the available products started. Params %s',
+            JSON.stringify(event.queryStringParameters)
+        );
 
-        const products = await productsService.getList();
+        const products = await productsService.getList((event.queryStringParameters?.dbMode as DbMode) || 'mysql');
 
         return formatJSONResponse(products);
     } catch (e) {
