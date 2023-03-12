@@ -1,0 +1,29 @@
+service: importService
+frameworkVersion: '3'
+
+provider:
+    name: aws
+    runtime: nodejs14.x
+    region: 'eu-central-1'
+
+custom:
+    esbuild:
+        bundle: true
+        minify: false
+        sourcemap: true
+        exclude: ['aws-sdk']
+        target: node14
+        platform: node
+        concurrency: 10
+
+functions:
+    hello:
+        handler: src/functions/importProductsFile/handler.main
+        events:
+            - httpApi:
+                  path: /import
+                  method: get
+
+plugins:
+    - serverless-dotenv-plugin
+    - serverless-esbuild
