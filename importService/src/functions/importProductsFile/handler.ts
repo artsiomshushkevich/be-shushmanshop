@@ -11,6 +11,13 @@ export const importProductsFile: ValidatedAPIGatewayLambda<null> = async (event)
         console.log('Importing started... Query string params are %s', JSON.stringify(event.queryStringParameters));
         const service = new ImportService(process.env.REGION);
 
+        if (!(event.queryStringParameters?.name && event.queryStringParameters.name.endsWith('.csv'))) {
+            return formatJSONResponse(
+                createHttpErrorResponseObject('Wrong name query parameter it should be "<name>.csv"!', uuidv4()),
+                HttpStatusCodes.BadRequest
+            );
+        }
+
         const link = await service.generatePresignedPutUrl({
             Bucket: process.env.UPLOAD_BUCKET,
             Key: event.queryStringParameters.name
