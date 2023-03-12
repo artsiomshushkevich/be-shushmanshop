@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getProductById Should return 404 error response 1`] = `
+{
+  "body": "{"message":"Product with such id not found!","uuid":"916eb106-2ecc-4ac9-af2c-044f75220c5b"}",
+  "statusCode": 404,
+}
+`;
+
+exports[`getProductById Should return correct response 1`] = `
+{
+  "body": "{"id":"2","title":"Volkswagen","description":"Golf E","price":25000}",
+  "statusCode": 200,
+}
+`;

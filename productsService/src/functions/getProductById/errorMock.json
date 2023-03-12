@@ -1,0 +1,10 @@
+{
+    "httpMethod": "GET",
+    "headers": {
+        "Content-Type": "application/json"
+    },
+    "pathParameters": {
+        "id": "9999"
+    },
+    "body": null
+}

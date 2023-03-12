@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getProductList Should return correct response 1`] = `
+{
+  "body": "[{"id":"1","title":"Audi","description":"E-tron 2021","price":30000},{"id":"2","title":"Volkswagen","description":"Golf E","price":25000},{"id":"3","title":"BYD","description":"Excellence","price":45000},{"id":"4","title":"Tesla","description":"Model S 2022","price":57000}]",
+  "statusCode": 200,
+}
+`;
