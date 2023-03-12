@@ -1,5 +1,5 @@
 export type HttpErrorBody = {
-  message: string;
-  // for tracking logs
-  uuid: string;
+    message: string;
+    // for tracking logs
+    uuid: string;
 };
