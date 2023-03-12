@@ -1,20 +1,34 @@
-import { products } from '@mocks/products';
+import { db, unmarshall, marshall, ScanCommand, GetItemCommand, PutItemCommand } from '@libs/dynamodb';
 import { Product } from './product.types';
 
 export const productsModel = {
-    getList: (): Promise<Product[]> =>
-        new Promise((resolve) =>
-            setTimeout(() => {
-                resolve(products);
-            }, 50)
-        ),
+    getList: async (): Promise<Product[]> => {
+        const response = await db.send(
+            new ScanCommand({
+                TableName: process.env.PRODUCTS_TABLE
+            })
+        );
 
-    getById: (id: string): Promise<Product | null> =>
-        new Promise((resolve) =>
-            setTimeout(() => {
-                const product = products.find((item) => item.id === id);
+        return response.Items.map((item) => unmarshall(item) as Product);
+    },
+    getById: async (id: string): Promise<Product | null> => {
+        const response = await db.send(
+            new GetItemCommand({
+                TableName: process.env.PRODUCTS_TABLE,
+                Key: { id: { S: id } }
+            })
+        );
 
-                resolve(product);
-            }, 50)
-        )
+        return response.Item ? (unmarshall(response.Item) as Product) : null;
+    },
+    create: async (product: Product): Promise<boolean> => {
+        await db.send(
+            new PutItemCommand({
+                TableName: process.env.PRODUCTS_TABLE,
+                Item: marshall(product)
+            })
+        );
+
+        return true;
+    }
 };
