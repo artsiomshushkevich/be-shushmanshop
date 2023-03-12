@@ -1,16 +1,20 @@
 import { v4 as uuidv4 } from 'uuid';
 import { middyfy } from '@libs/lambda';
-import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
+import type { ValidatedAPIGatewayLambda } from '@libs/api-gateway';
 import { formatJSONResponse } from '@libs/api-gateway';
 import { HttpStatusCodes } from '@localtypes/httpStatusCodes';
 import { createHttpErrorResponseObject } from '@utils/createHttpErrorResponseObject/createHttpErrorResponseObject';
-import { importService } from '@services/import';
+import { ImportService } from '@services/import';
 
-export const importProductsFile: ValidatedEventAPIGatewayProxyEvent<null> = async (event) => {
+export const importProductsFile: ValidatedAPIGatewayLambda<null> = async (event) => {
     try {
         console.log('Importing started... Query string params are %s', JSON.stringify(event.queryStringParameters));
+        const service = new ImportService(process.env.REGION);
 
-        const link = await importService.generatePresignedPutUrl(event.queryStringParameters.name);
+        const link = await service.generatePresignedPutUrl({
+            Bucket: process.env.UPLOAD_BUCKET,
+            Key: event.queryStringParameters.name
+        });
 
         return formatJSONResponse({ link }, HttpStatusCodes.Created);
     } catch (e) {

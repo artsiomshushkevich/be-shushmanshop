@@ -20,6 +20,16 @@ provider:
     environment:
         REGION: ${self:custom.MAIN_REGION}
         UPLOAD_BUCKET: ${self:custom.UPLOAD_BUCKET}
+    iamRoleStatements:
+        - Effect: 'Allow'
+          Action:
+              - 's3:PutObject'
+              - 's3:GetObject'
+              - 's3:ListBucket'
+              - 's3:DeleteObject'
+              - 's3:GetBucketLocation'
+          Resource:
+              - 'arn:aws:s3:::shushmanshop-static/*'
 
 functions:
     importProductsFile:
@@ -28,6 +38,17 @@ functions:
             - httpApi:
                   path: /import
                   method: get
+    importFileParser:
+        handler: src/functions/importFileParser/handler.importFileParser
+        events:
+            - s3:
+                  bucket: ${self:custom.UPLOAD_BUCKET}
+                  event: s3:ObjectCreated:*
+                  rules:
+                      - prefix: uploaded
+                      - suffix: .csv
+                  existing: true
+                  forceDeploy: true
 
 plugins:
     - serverless-dotenv-plugin

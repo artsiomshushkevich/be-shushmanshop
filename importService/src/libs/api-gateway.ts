@@ -6,7 +6,7 @@ type ValidatedAPIGatewayProxyEvent<S> = Omit<APIGatewayProxyEvent, 'body'> & {
     body: FromSchema<S>;
 };
 
-export type ValidatedEventAPIGatewayProxyEvent<S> = Handler<ValidatedAPIGatewayProxyEvent<S>, APIGatewayProxyResult>;
+export type ValidatedAPIGatewayLambda<S> = Handler<ValidatedAPIGatewayProxyEvent<S>, APIGatewayProxyResult>;
 
 export const formatJSONResponse = (
     response: Record<string, unknown> | Array<unknown>,
