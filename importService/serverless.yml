@@ -1,0 +1,55 @@
+service: importService
+frameworkVersion: '3'
+
+custom:
+    esbuild:
+        bundle: true
+        minify: false
+        sourcemap: true
+        exclude: ['aws-sdk']
+        target: node14
+        platform: node
+        concurrency: 10
+    MAIN_REGION: eu-central-1
+    UPLOAD_BUCKET: shushmanshop-static
+
+provider:
+    name: aws
+    runtime: nodejs14.x
+    region: ${self:custom.MAIN_REGION}
+    environment:
+        REGION: ${self:custom.MAIN_REGION}
+        UPLOAD_BUCKET: ${self:custom.UPLOAD_BUCKET}
+    iamRoleStatements:
+        - Effect: 'Allow'
+          Action: 's3:ListBucket'
+          Resource:
+              - 'arn:aws:s3:::shushmanshop-static'
+        - Effect: 'Allow'
+          Action:
+              - 's3:*'
+          Resource:
+              - 'arn:aws:s3:::shushmanshop-static/*'
+
+functions:
+    importProductsFile:
+        handler: src/functions/importProductsFile/handler.main
+        events:
+            - httpApi:
+                  path: /import
+                  method: get
+    importFileParser:
+        handler: src/functions/importFileParser/handler.importFileParser
+        events:
+            - s3:
+                  bucket: ${self:custom.UPLOAD_BUCKET}
+                  event: s3:ObjectCreated:*
+                  rules:
+                      - prefix: uploaded/
+                      - suffix: .csv
+                  existing: true
+                  forceDeploy: true
+
+plugins:
+    - serverless-dotenv-plugin
+    - serverless-esbuild
