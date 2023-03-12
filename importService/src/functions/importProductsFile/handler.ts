@@ -4,14 +4,15 @@ import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
 import { formatJSONResponse } from '@libs/api-gateway';
 import { HttpStatusCodes } from '@localtypes/httpStatusCodes';
 import { createHttpErrorResponseObject } from '@utils/createHttpErrorResponseObject/createHttpErrorResponseObject';
+import { importService } from '@services/import';
 
-export const importProductsFile: ValidatedEventAPIGatewayProxyEvent<null> = async (_event) => {
+export const importProductsFile: ValidatedEventAPIGatewayProxyEvent<null> = async (event) => {
     try {
-        console.log(
-            'Importing started'
-        );
+        console.log('Importing started... Query string params are %s', JSON.stringify(event.queryStringParameters));
 
-        return formatJSONResponse({message: 'importing...'}, HttpStatusCodes.Created);
+        const link = await importService.generatePresignedPutUrl(event.queryStringParameters.name);
+
+        return formatJSONResponse({ link }, HttpStatusCodes.Created);
     } catch (e) {
         const uuid = uuidv4();
         console.error('Importing products has been failed. UUID: %s', uuid, e);

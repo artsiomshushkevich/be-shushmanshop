@@ -5,6 +5,7 @@ import { HttpStatusCodes, HttpStatusCodesUnion } from '@localtypes/httpStatusCod
 type ValidatedAPIGatewayProxyEvent<S> = Omit<APIGatewayProxyEvent, 'body'> & {
     body: FromSchema<S>;
 };
+
 export type ValidatedEventAPIGatewayProxyEvent<S> = Handler<ValidatedAPIGatewayProxyEvent<S>, APIGatewayProxyResult>;
 
 export const formatJSONResponse = (

@@ -1,11 +1,6 @@
 service: importService
 frameworkVersion: '3'
 
-provider:
-    name: aws
-    runtime: nodejs14.x
-    region: 'eu-central-1'
-
 custom:
     esbuild:
         bundle: true
@@ -15,9 +10,19 @@ custom:
         target: node14
         platform: node
         concurrency: 10
+    MAIN_REGION: eu-central-1
+    UPLOAD_BUCKET: shushmanshop-static
+
+provider:
+    name: aws
+    runtime: nodejs14.x
+    region: ${self:custom.MAIN_REGION}
+    environment:
+        REGION: ${self:custom.MAIN_REGION}
+        UPLOAD_BUCKET: ${self:custom.UPLOAD_BUCKET}
 
 functions:
-    hello:
+    importProductsFile:
         handler: src/functions/importProductsFile/handler.main
         events:
             - httpApi:
