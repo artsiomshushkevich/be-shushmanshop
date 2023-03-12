@@ -22,12 +22,12 @@ provider:
         UPLOAD_BUCKET: ${self:custom.UPLOAD_BUCKET}
     iamRoleStatements:
         - Effect: 'Allow'
+          Action: 's3:ListBucket'
+          Resource:
+              - 'arn:aws:s3:::shushmanshop-static'
+        - Effect: 'Allow'
           Action:
-              - 's3:PutObject'
-              - 's3:GetObject'
-              - 's3:ListBucket'
-              - 's3:DeleteObject'
-              - 's3:GetBucketLocation'
+              - 's3:*'
           Resource:
               - 'arn:aws:s3:::shushmanshop-static/*'
 
@@ -45,7 +45,7 @@ functions:
                   bucket: ${self:custom.UPLOAD_BUCKET}
                   event: s3:ObjectCreated:*
                   rules:
-                      - prefix: uploaded
+                      - prefix: uploaded/
                       - suffix: .csv
                   existing: true
                   forceDeploy: true
