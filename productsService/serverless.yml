@@ -1,0 +1,74 @@
+service: productsService
+frameworkVersion: '3'
+
+custom:
+    esbuild:
+        bundle: true
+        minify: false
+        sourcemap: true
+        exclude: ['aws-sdk']
+        target: node14
+        platform: node
+        concurrency: 10
+    MAIN_REGION: eu-central-1
+    STOCKS_TABLE: StocksTable
+    PRODUCTS_TABLE: ProductsTable
+
+provider:
+    name: aws
+    runtime: nodejs14.x
+    region: ${self:custom.MAIN_REGION}
+    environment:
+        REGION: ${self:custom.MAIN_REGION}
+        PRODUCTS_TABLE: ${self:custom.PRODUCTS_TABLE}
+        STOCKS_TABLE: ${self:custom.STOCKS_TABLE}
+
+    iamRoleStatements:
+        - Effect: Allow
+          Action:
+              - 'dynamodb:DescribeTable'
+              - 'dynamodb:Query'
+              - 'dynamodb:Scan'
+              - 'dynamodb:GetItem'
+              - 'dynamodb:PutItem'
+              - 'dynamodb:UpdateItem'
+              - 'dynamodb:DeleteItem'
+          Resource: 'arn:aws:dynamodb:${self:custom.MAIN_REGION}:*:table/*'
+
+resources:
+    Resources:
+        ProductsTable:
+            Type: AWS::DynamoDB::Table
+            Properties:
+                TableName: ${self:custom.PRODUCTS_TABLE}
+                AttributeDefinitions:
+                    - AttributeName: id
+                      AttributeType: S
+                KeySchema:
+                    - AttributeName: id
+                      KeyType: HASH
+                ProvisionedThroughput:
+                    ReadCapacityUnits: 1
+                    WriteCapacityUnits: 1
+        StocksTable:
+            Type: AWS::DynamoDB::Table
+            Properties:
+                TableName: ${self:custom.STOCKS_TABLE}
+                AttributeDefinitions:
+                    - AttributeName: productId
+                      AttributeType: S
+                KeySchema:
+                    - AttributeName: productId
+                      KeyType: HASH
+                ProvisionedThroughput:
+                    ReadCapacityUnits: 1
+                    WriteCapacityUnits: 1
+
+functions:
+    - ${file('src/functions/getProductById/index.yml')}
+    - ${file('src/functions/getProductList/index.yml')}
+    - ${file('src/functions/createProduct/index.yml')}
+
+plugins:
+    - serverless-dotenv-plugin
+    - serverless-esbuild

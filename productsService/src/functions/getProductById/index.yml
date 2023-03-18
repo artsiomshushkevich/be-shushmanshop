@@ -1,0 +1,6 @@
+getProductById:
+    handler: src/functions/getProductById/handler.main
+    events:
+        - http:
+              method: GET
+              path: /product/{id}

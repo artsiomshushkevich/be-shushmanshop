@@ -57,7 +57,6 @@ export const productsService = {
             await stocksMySqlModel.create(newStock);
         } else {
             await productsModel.create(newProduct);
-
             await stocksModel.create(newStock);
         }
 
