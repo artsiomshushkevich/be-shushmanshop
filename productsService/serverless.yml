@@ -1,5 +1,6 @@
 service: productsService
 frameworkVersion: '3'
+useDotenv: true
 
 custom:
     esbuild:
@@ -13,6 +14,7 @@ custom:
     MAIN_REGION: eu-central-1
     QUEUE_NAME: CatalogItemsQueue
     SQS_QUEUE_URL: { Ref: CatalogItemsQueue }
+    SNS_TOPIC_NAME: createProductTopic
 
 provider:
     name: aws
@@ -21,6 +23,10 @@ provider:
     environment:
         REGION: ${self:custom.MAIN_REGION}
         QUEUE_URL: ${self:custom.SQS_QUEUE_URL}
+        CREATE_PRODUCT_TOPIC_ARN: !Ref CreateProductTopic
+        MYSQL_DB_HOST: ${env:MYSQL_DB_HOST}
+        MYSQL_DB_USER: ${env:MYSQL_DB_USER}
+        MYSQL_DB_PASSWORD: ${env:MYSQL_DB_PASSWORD}
 
     iamRoleStatements:
         - Effect: Allow
@@ -28,14 +34,28 @@ provider:
               - sqs:*
           Resource:
               Fn::GetAtt: [CatalogItemsQueue, Arn]
+        - Effect: Allow
+          Action:
+              - sns:*
+          Resource: !Ref CreateProductTopic
 
 resources:
     Resources:
         CatalogItemsQueue:
-            Type: 'AWS::SQS::Queue'
+            Type: AWS::SQS::Queue
             Properties:
                 QueueName: sqs-${self:custom.QUEUE_NAME}-${sls:stage}.fifo
                 FifoQueue: true
+        CreateProductTopic:
+            Type: AWS::SNS::Topic
+            Properties:
+                TopicName: ${self:custom.SNS_TOPIC_NAME}
+        EmailSend:
+            Type: AWS::SNS::Subscription
+            Properties:
+                Endpoint: ${env:EMAIL}
+                Protocol: email
+                TopicArn: !Ref CreateProductTopic
 
 functions:
     - ${file('src/functions/getProductById/index.yml')}
@@ -44,5 +64,4 @@ functions:
     - ${file('src/functions/catalogBatchProcess/index.yml')}
 
 plugins:
-    - serverless-dotenv-plugin
     - serverless-esbuild
