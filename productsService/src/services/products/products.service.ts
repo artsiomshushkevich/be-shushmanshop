@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { Product, productsModel, ProductWithCount } from '@models/products';
+import { Product, productsModel, ProductWithCount, ProductWithCountWithoutId } from '@models/products';
 import { Stock, stocksModel } from '@models/stocks';
 
 export const productsService = {
@@ -11,7 +11,7 @@ export const productsService = {
         const result = await productsModel.getById(id);
         return result;
     },
-    create: async (product: Omit<ProductWithCount, 'id'>): Promise<ProductWithCount> => {
+    create: async (product: ProductWithCountWithoutId): Promise<ProductWithCount> => {
         const id: string = uuidv4();
         const { title, description, price, count } = product;
 
@@ -34,7 +34,7 @@ export const productsService = {
 
         return newProductWithCount;
     },
-    bulkCreate: async (products: Array<Omit<ProductWithCount, 'id'>>): Promise<ProductWithCount[]> => {
+    bulkCreate: async (products: Array<ProductWithCountWithoutId>): Promise<ProductWithCount[]> => {
         const productsToCreate: Product[] = [];
         const stocksToCreate: Stock[] = [];
         const productsWithCount: ProductWithCount[] = [];

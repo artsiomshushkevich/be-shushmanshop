@@ -20,6 +20,7 @@ provider:
     region: ${self:custom.MAIN_REGION}
     environment:
         REGION: ${self:custom.MAIN_REGION}
+        QUEUE_URL: ${self:custom.SQS_QUEUE_URL}
 
     iamRoleStatements:
         - Effect: Allow

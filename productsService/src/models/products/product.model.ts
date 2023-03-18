@@ -62,7 +62,7 @@ export const productsModel = {
 
         const connectionObj = await setUpConnection();
 
-        await query(connectionObj.get(), BULK_INSERT, productsToInsert);
+        await query(connectionObj.get(), BULK_INSERT, [productsToInsert]);
 
         connectionObj.release();
 

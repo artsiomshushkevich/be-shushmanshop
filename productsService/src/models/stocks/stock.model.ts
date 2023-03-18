@@ -32,7 +32,7 @@ export const stocksModel = {
 
         const connectionObj = await setUpConnection();
 
-        await query(connectionObj.get(), BULK_INSERT, stocksToInsert);
+        await query(connectionObj.get(), BULK_INSERT, [stocksToInsert]);
 
         connectionObj.release();
 

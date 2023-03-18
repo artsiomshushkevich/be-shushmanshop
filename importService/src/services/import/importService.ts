@@ -7,7 +7,7 @@ import {
     CopyObjectCommand,
     DeleteObjectCommand
 } from '@aws-sdk/client-s3';
-import { SQSClient, SendMessageCommand, SendMessageCommandInput } from '@aws-sdk/client-sqs';
+import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import csv from 'csv-parser';
 import type { BasicS3Config } from '@libs/s3';
 
