@@ -5,7 +5,6 @@ import { HttpStatusCodes } from '@localtypes/httpStatusCodes';
 import { productsService } from '@services/products';
 import type { ProductWithCount } from '@models/products';
 import { createHttpErrorResponseObject } from '@utils/createHttpErrorResponseObject/createHttpErrorResponseObject';
-import { DbMode } from '@localtypes/dbMode';
 import { shema } from './shema';
 
 export const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof shema> = async (event) => {
@@ -16,10 +15,7 @@ export const createProduct: ValidatedEventAPIGatewayProxyEvent<typeof shema> = a
             JSON.stringify(event.queryStringParameters)
         );
 
-        const product = await productsService.create(
-            event.body as Omit<ProductWithCount, 'id'>,
-            (event.queryStringParameters?.dbMode as DbMode) || 'mysql'
-        );
+        const product = await productsService.create(event.body as Omit<ProductWithCount, 'id'>);
 
         return formatJSONResponse(product, HttpStatusCodes.Created);
     } catch (e) {

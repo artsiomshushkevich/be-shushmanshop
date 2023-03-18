@@ -1,40 +1,17 @@
 import { v4 as uuidv4 } from 'uuid';
-import { productsModel, productsMySqlModel, ProductWithCount } from '@models/products';
-import { stocksModel, stocksMySqlModel } from '@models/stocks';
-import { DbMode } from '@localtypes/dbMode';
+import { Product, productsModel, ProductWithCount } from '@models/products';
+import { Stock, stocksModel } from '@models/stocks';
 
 export const productsService = {
-    getList: async (dbMode: DbMode = 'mysql'): Promise<ProductWithCount[]> => {
-        if (dbMode === 'mysql') {
-            const result = await productsMySqlModel.getList();
-            return result;
-        }
-
-        const products = await productsModel.getList();
-        const stocks = await stocksModel.getList();
-
-        const productIdToAmountToMap = stocks.reduce(
-            (acc, currVal) => ({ ...acc, [currVal.productId]: currVal.count }),
-            {}
-        );
-
-        return products.map((item) => ({
-            ...item,
-            count: productIdToAmountToMap[item.id] || 0
-        }));
+    getList: async (): Promise<ProductWithCount[]> => {
+        const result = await productsModel.getList();
+        return result;
     },
-    getById: async (id: string, dbMode: DbMode = 'mysql'): Promise<ProductWithCount | null> => {
-        if (dbMode === 'mysql') {
-            const result = await productsMySqlModel.getById(id);
-            return result;
-        }
-
-        const product = await productsModel.getById(id);
-        const stock = await stocksModel.getProductId(id);
-
-        return product ? { ...product, count: stock ? stock.count : 0 } : null;
+    getById: async (id: string): Promise<ProductWithCount | null> => {
+        const result = await productsModel.getById(id);
+        return result;
     },
-    create: async (product: Omit<ProductWithCount, 'id'>, dbMode: DbMode = 'mysql'): Promise<ProductWithCount> => {
+    create: async (product: Omit<ProductWithCount, 'id'>): Promise<ProductWithCount> => {
         const id: string = uuidv4();
         const { title, description, price, count } = product;
 
@@ -52,14 +29,43 @@ export const productsService = {
             count: count || 0
         };
 
-        if (dbMode === 'mysql') {
-            await productsMySqlModel.create(newProduct);
-            await stocksMySqlModel.create(newStock);
-        } else {
-            await productsModel.create(newProduct);
-            await stocksModel.create(newStock);
-        }
+        await productsModel.create(newProduct);
+        await stocksModel.create(newStock);
 
         return newProductWithCount;
+    },
+    bulkCreate: async (products: Array<Omit<ProductWithCount, 'id'>>): Promise<ProductWithCount[]> => {
+        const productsToCreate: Product[] = [];
+        const stocksToCreate: Stock[] = [];
+        const productsWithCount: ProductWithCount[] = [];
+
+        products.forEach((item) => {
+            const id: string = uuidv4();
+            const { title, description, price, count } = item;
+            const formattedCount = count || 0;
+
+            const newProduct: Product = {
+                id,
+                title,
+                description,
+                price
+            };
+
+            const newProductWithCount: ProductWithCount = { ...newProduct, count: formattedCount };
+
+            const newStock: Stock = {
+                productId: id,
+                count: formattedCount
+            };
+
+            productsToCreate.push(newProduct);
+            stocksToCreate.push(newStock);
+            productsWithCount.push(newProductWithCount);
+        });
+
+        await productsModel.bulkCreate(productsToCreate);
+        await stocksModel.bulkCreate(stocksToCreate);
+
+        return productsWithCount;
     }
 };
