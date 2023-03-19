@@ -56,6 +56,14 @@ resources:
                 Endpoint: ${env:EMAIL}
                 Protocol: email
                 TopicArn: !Ref CreateProductTopic
+        EmailSendWithFilter:
+            Type: AWS::SNS::Subscription
+            Properties:
+                Endpoint: ${env:FILTER_EMAIL}
+                Protocol: email
+                TopicArn: !Ref CreateProductTopic
+                FilterPolicyScope: MessageAttributes
+                FilterPolicy: { 'isBYDLoaded': ['yes'] }
 
 functions:
     - ${file('src/functions/getProductById/index.yml')}

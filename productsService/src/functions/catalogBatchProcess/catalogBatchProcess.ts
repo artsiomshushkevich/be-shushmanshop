@@ -29,7 +29,13 @@ export const main: SQSHandler = async (event) => {
         await snsClient.send(
             new PublishCommand({
                 TopicArn: process.env.CREATE_PRODUCT_TOPIC_ARN,
-                Message: `Products have been loaded! Date: ${new Date()}`
+                Message: `Products have been loaded! Date: ${new Date()}`,
+                MessageAttributes: {
+                    isBYDLoaded: {
+                        DataType: 'String',
+                        StringValue: productsWithAmount.find((item) => item.title === 'BYD') ? 'yes' : 'no'
+                    }
+                }
             })
         );
     } catch (e) {
