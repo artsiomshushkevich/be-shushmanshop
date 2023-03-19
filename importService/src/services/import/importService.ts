@@ -78,12 +78,17 @@ export class ImportService {
 
             // @ts-ignore
             item.Body.pipe(csv())
-                .on('data', async (data) => {
-                    console.log('Sending data to SQS', data);
+                .on('data', (data) => {
+                    console.log('Sending data to SQS...', data);
                     this.getSqsClient().send(
                         new SendMessageCommand({
                             QueueUrl: process.env.QUEUE_URL,
-                            MessageBody: JSON.stringify(data),
+                            MessageBody: JSON.stringify({
+                                title: data.title,
+                                description: data.description,
+                                price: +data.price,
+                                count: +data.count || 0
+                            }),
                             MessageDeduplicationId: `${index++}`,
                             MessageGroupId: csvFileStreamingUuid
                         })

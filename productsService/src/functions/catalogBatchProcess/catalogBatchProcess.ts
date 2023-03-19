@@ -10,16 +10,7 @@ import { snsClient } from '@libs/sns';
 export const main: SQSHandler = async (event) => {
     try {
         console.log('Getting all products from the queue. Records length', JSON.stringify(event.Records));
-        const productsWithAmount: ProductWithCountWithoutId[] = event.Records.map((item) => {
-            const unformattedProduct = JSON.parse(item.body);
-
-            return {
-                title: unformattedProduct.title,
-                description: unformattedProduct.description,
-                price: +unformattedProduct.price,
-                count: +unformattedProduct.count || 0
-            };
-        });
+        const productsWithAmount: ProductWithCountWithoutId[] = event.Records.map((item) => JSON.parse(item.body));
 
         console.log('Saving all the products to DB', JSON.stringify(productsWithAmount));
         await productsService.bulkCreate(productsWithAmount);
