@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`catalogBatchProcess Should make some logs until DB bulk creation won't thrown an error 1`] = `
+[
+  [
+    "Getting all products from the queue. Records length",
+    "[{"body":"{\\"title\\":\\"BYD\\",\\"description\\":\\"Excellence\\",\\"price\\":3000,\\"count\\":20}","receiptHandle":"recipieptHandle0"},{"body":"{\\"title\\":\\"Testla\\",\\"description\\":\\"Model S\\",\\"price\\":30000,\\"count\\":20}","receiptHandle":"recipieptHandle1"}]",
+  ],
+  [
+    "Saving all the products to DB",
+    "[{"title":"BYD","description":"Excellence","price":3000,"count":20},{"title":"Testla","description":"Model S","price":30000,"count":20}]",
+  ],
+]
+`;
+
+exports[`catalogBatchProcess Should make some logs until DB bulk creation won't thrown an error 2`] = `
+[
+  [
+    "Failed to process products from SQS queue! ",
+    false,
+  ],
+]
+`;
+
+exports[`catalogBatchProcess Should successfully perform all the operations (getting products from records/creating in DB, deleting from SNS, sending SNS) and send logs 1`] = `
+[
+  [
+    "Getting all products from the queue. Records length",
+    "[{"body":"{\\"title\\":\\"BYD\\",\\"description\\":\\"Excellence\\",\\"price\\":3000,\\"count\\":20}","receiptHandle":"recipieptHandle0"},{"body":"{\\"title\\":\\"Testla\\",\\"description\\":\\"Model S\\",\\"price\\":30000,\\"count\\":20}","receiptHandle":"recipieptHandle1"}]",
+  ],
+  [
+    "Saving all the products to DB",
+    "[{"title":"BYD","description":"Excellence","price":3000,"count":20},{"title":"Testla","description":"Model S","price":30000,"count":20}]",
+  ],
+  [
+    "Deleting messages from queue",
+  ],
+  [
+    "Sending notification to creators email",
+  ],
+]
+`;
+
+exports[`catalogBatchProcess Should successfully perform all the operations (getting products from records/creating in DB, deleting from SNS, sending SNS) and send logs 2`] = `[]`;
