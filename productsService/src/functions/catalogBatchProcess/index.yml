@@ -1,0 +1,16 @@
+catalogBatchProcess:
+    handler: src/functions/catalogBatchProcess/catalogBatchProcess.main
+    events:
+        - sqs:
+              arn:
+                  Fn::GetAtt:
+                      - ${self:custom.QUEUE_NAME}
+                      - Arn
+              batchSize: 5
+              filterPatterns:
+                  - body:
+                        {
+                            'title': [{ 'exists': true }],
+                            'description': [{ 'exists': true }],
+                            'price': [{ 'numeric': ['>', 0] }]
+                        }

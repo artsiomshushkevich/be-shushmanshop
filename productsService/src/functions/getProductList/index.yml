@@ -1,0 +1,6 @@
+getProductList:
+    handler: src/functions/getProductList/handler.main
+    events:
+        - http:
+              method: GET
+              path: /product/available

@@ -10,16 +10,19 @@ custom:
         target: node14
         platform: node
         concurrency: 10
-    MAIN_REGION: eu-central-1
     UPLOAD_BUCKET: shushmanshop-static
+    QUEUE_NAME: sqs-CatalogItemsQueue-${sls:stage}.fifo
+    QUEUE_URL: https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.QUEUE_NAME}
 
 provider:
     name: aws
     runtime: nodejs14.x
-    region: ${self:custom.MAIN_REGION}
+    region: ${opt:region, 'eu-central-1'}
     environment:
-        REGION: ${self:custom.MAIN_REGION}
+        REGION: ${aws:region}
         UPLOAD_BUCKET: ${self:custom.UPLOAD_BUCKET}
+        QUEUE_URL: ${self:custom.QUEUE_URL}
+
     iamRoleStatements:
         - Effect: 'Allow'
           Action: 's3:ListBucket'
@@ -30,6 +33,11 @@ provider:
               - 's3:*'
           Resource:
               - 'arn:aws:s3:::shushmanshop-static/*'
+        - Effect: 'Allow'
+          Action:
+              - 'sqs:*'
+          Resource:
+              - 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.QUEUE_NAME}'
 
 functions:
     importProductsFile:
@@ -51,5 +59,4 @@ functions:
                   forceDeploy: true
 
 plugins:
-    - serverless-dotenv-plugin
     - serverless-esbuild

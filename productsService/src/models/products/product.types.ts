@@ -6,3 +6,5 @@ export type Product = {
 };
 
 export type ProductWithCount = Product & { count: number };
+
+export type ProductWithCountWithoutId = Omit<ProductWithCount, 'id'>;

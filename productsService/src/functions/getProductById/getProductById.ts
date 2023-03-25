@@ -5,7 +5,6 @@ import type { HttpErrorBody } from '@localtypes/httpErrorBody';
 import { HttpStatusCodes } from '@localtypes/httpStatusCodes';
 import { productsService } from '@services/products';
 import { createHttpErrorResponseObject } from '@utils/createHttpErrorResponseObject/createHttpErrorResponseObject';
-import type { DbMode } from '@localtypes/dbMode';
 
 export const getProductById: ValidatedEventAPIGatewayProxyEvent<null> = async (event) => {
     try {
@@ -17,7 +16,7 @@ export const getProductById: ValidatedEventAPIGatewayProxyEvent<null> = async (e
             JSON.stringify(event.queryStringParameters)
         );
 
-        const product = await productsService.getById(id, (event.queryStringParameters?.dbMode as DbMode) || 'mysql');
+        const product = await productsService.getById(id);
 
         if (product) {
             return formatJSONResponse(product);

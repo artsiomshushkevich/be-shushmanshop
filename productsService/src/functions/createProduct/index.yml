@@ -1,0 +1,6 @@
+createProduct:
+    handler: src/functions/createProduct/handler.main
+    events:
+        - http:
+              method: POST
+              path: /product
