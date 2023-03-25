@@ -20,7 +20,7 @@ provider:
     region: ${opt:region, 'eu-central-1'}
     environment:
         REGION: ${aws:region}
-        UPLOAD_BUCKET: ${self:custom.UPLOAD_BUCKET}
+        UPLOAD_BUCKET: ${self:custom.UPLOAD_BUCKET}xw
         QUEUE_URL: ${self:custom.QUEUE_URL}
 
     iamRoleStatements:

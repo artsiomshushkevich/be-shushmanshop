@@ -1,0 +1,32 @@
+service: authService
+frameworkVersion: '3'
+
+custom:
+    esbuild:
+        bundle: true
+        minify: false
+        sourcemap: true
+        exclude: ['aws-sdk']
+        target: node14
+        platform: node
+        concurrency: 10
+
+provider:
+    name: aws
+    runtime: nodejs14.x
+    region: ${opt:region, 'eu-central-1'}
+    environment:
+        REGION: ${aws:region}
+        UPLOAD_BUCKET: ${self:custom.UPLOAD_BUCKET}
+        QUEUE_URL: ${self:custom.QUEUE_URL}
+
+functions:
+    importProductsFile:
+        handler: src/functions/basicAuthorizer/handler.main
+        events:
+            - httpApi:
+                  path: /auth
+                  method: get
+
+plugins:
+    - serverless-esbuild
