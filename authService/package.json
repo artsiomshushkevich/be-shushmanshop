@@ -8,7 +8,7 @@
         "deploy": "sls deploy",
         "prettier:check": "prettier --check src/**/*",
         "prettier:fix": "prettier --write src/**/*",
-        "prepare": "cd .. && husky install importService/.husky"
+        "prepare": "cd .. && husky install authService/.husky"
     },
     "engines": {
         "node": ">=14.15.0"
