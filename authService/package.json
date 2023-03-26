@@ -4,7 +4,7 @@
     "description": "Service for importing products",
     "main": "serverless.yml",
     "scripts": {
-        "test": "jest",
+        "test": "jest --passWithNoTests",
         "deploy": "sls deploy",
         "prettier:check": "prettier --check src/**/*",
         "prettier:fix": "prettier --write src/**/*",
