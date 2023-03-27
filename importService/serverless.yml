@@ -25,6 +25,7 @@ provider:
         QUEUE_URL: ${self:custom.QUEUE_URL}
 
     httpApi:
+        cors: true
         authorizers:
             basicAuthorizer:
                 type: request
