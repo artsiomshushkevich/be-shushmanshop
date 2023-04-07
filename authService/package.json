@@ -1,0 +1,42 @@
+{
+    "name": "auth-service",
+    "version": "1.0.0",
+    "description": "Service for importing products",
+    "main": "serverless.yml",
+    "scripts": {
+        "test": "jest --passWithNoTests",
+        "deploy": "sls deploy",
+        "prettier:check": "prettier --check src/**/*",
+        "prettier:fix": "prettier --write src/**/*",
+        "prepare": "cd .. && husky install authService/.husky"
+    },
+    "engines": {
+        "node": ">=14.15.0"
+    },
+    "dependencies": {
+        "@middy/core": "^3.4.0",
+        "@middy/http-cors": "^4.2.6",
+        "@middy/http-json-body-parser": "^3.4.0",
+        "uuid": "^9.0.0"
+    },
+    "devDependencies": {
+        "@types/aws-lambda": "^8.10.71",
+        "@types/jest": "^29.4.0",
+        "@types/node": "^14.14.25",
+        "esbuild": "^0.14.11",
+        "husky": "^8.0.3",
+        "jest": "^29.4.3",
+        "json-schema-to-ts": "^1.5.0",
+        "prettier": "^2.8.4",
+        "serverless": "^3.0.0",
+        "serverless-dotenv-plugin": "^6.0.0",
+        "serverless-esbuild": "^1.23.3",
+        "serverless-plugin-typescript": "^2.1.4",
+        "ts-jest": "^29.0.5",
+        "ts-node": "^10.4.0",
+        "tsconfig-paths": "^3.9.0",
+        "typescript": "^4.1.3"
+    },
+    "author": "Artsiom Shushkevich",
+    "license": "MIT"
+}

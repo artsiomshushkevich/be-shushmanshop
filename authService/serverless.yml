@@ -1,0 +1,29 @@
+service: authService
+frameworkVersion: '3'
+
+custom:
+    esbuild:
+        bundle: true
+        minify: false
+        sourcemap: true
+        exclude: ['aws-sdk']
+        target: node14
+        platform: node
+        concurrency: 10
+    API_ID: ${opt:API_ID, 'uwg0ffvl4l'}
+
+provider:
+    name: aws
+    runtime: nodejs14.x
+    region: ${opt:region, 'eu-central-1'}
+    environment:
+        REGION: ${aws:region}
+        API_ARN_PATTERN: arn:aws:execute-api:${aws:region}:${aws:accountId}:${self:custom.API_ID}/*/*
+
+functions:
+    basicAuthorizer:
+        handler: src/functions/basicAuthorizer/handler.basicAuthorizer
+
+plugins:
+    - serverless-esbuild
+    - serverless-dotenv-plugin

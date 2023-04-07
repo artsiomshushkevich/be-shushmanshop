@@ -13,6 +13,7 @@ custom:
     UPLOAD_BUCKET: shushmanshop-static
     QUEUE_NAME: sqs-CatalogItemsQueue-${sls:stage}.fifo
     QUEUE_URL: https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.QUEUE_NAME}
+    BASIC_AUTHORIZER_ARN: arn:aws:lambda:${aws:region}:${aws:accountId}:function:authService-${sls:stage}-basicAuthorizer
 
 provider:
     name: aws
@@ -22,6 +23,16 @@ provider:
         REGION: ${aws:region}
         UPLOAD_BUCKET: ${self:custom.UPLOAD_BUCKET}
         QUEUE_URL: ${self:custom.QUEUE_URL}
+
+    httpApi:
+        cors: true
+        authorizers:
+            basicAuthorizer:
+                type: request
+                functionArn: ${self:custom.BASIC_AUTHORIZER_ARN}
+                resultTtlInSeconds: 0
+                identitySource:
+                    - $request.header.Authorization
 
     iamRoleStatements:
         - Effect: 'Allow'
@@ -46,6 +57,9 @@ functions:
             - httpApi:
                   path: /import
                   method: get
+                  authorizer:
+                      name: basicAuthorizer
+
     importFileParser:
         handler: src/functions/importFileParser/handler.importFileParser
         events:
